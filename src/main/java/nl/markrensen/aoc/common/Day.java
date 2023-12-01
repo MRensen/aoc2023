@@ -1,4 +1,4 @@
-package nl.arjenwiersme.aoc.common;
+package nl.markrensen.aoc.common;
 
 import java.util.List;
 
