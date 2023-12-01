@@ -159,7 +159,7 @@ public class Day01 implements Day<Integer> {
         int sum = 0;
         for(String s : input){
             String result = parseString2(s);
-            System.out.println("Out: " + result + ", In: " + s);
+//            System.out.println("Out: " + result + ", In: " + s);
             sum += Integer.parseInt(result);
         }
         return sum;
