@@ -74,7 +74,7 @@ public class Day01 implements Day<Integer> {
                         indexFirst = input.indexOf(strings[Integer.parseInt(String.valueOf(first)) - 1]);
                     }
                 }
-                if(input.equals("813seventhree")){
+                if(input.equals("2bsgzdjlllxfournsixrtbpvkm4")){
                     System.out.println();
                 }
                 if(last>'0'){
@@ -84,7 +84,7 @@ public class Day01 implements Day<Integer> {
                             check = input.lastIndexOf(strings[Integer.parseInt(String.valueOf(last)) - 1]);
                         }
                         indexLast = input.lastIndexOf(integers[Integer.parseInt(String.valueOf(last)) - 1]);
-                        if(check >= 0 && check > indexFirst){
+                        if(check >= 0 && check > indexLast){
                             indexLast = check;
                         }
                     } else {
