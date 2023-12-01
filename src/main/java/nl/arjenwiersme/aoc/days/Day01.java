@@ -74,9 +74,9 @@ public class Day01 implements Day<Integer> {
                         indexFirst = input.indexOf(strings[Integer.parseInt(String.valueOf(first)) - 1]);
                     }
                 }
-                if(input.equals("2bsgzdjlllxfournsixrtbpvkm4")){
-                    System.out.println();
-                }
+//                if(input.equals("2bsgzdjlllxfournsixrtbpvkm4")){
+//                    System.out.println();
+//                }
                 if(last>'0'){
                     if(input.contains(String.valueOf(integers[Integer.parseInt(String.valueOf(last))-1]))) {
                         int check = -1;
