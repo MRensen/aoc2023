@@ -74,24 +74,25 @@ public class Day01 implements Day<Integer> {
                         indexFirst = input.indexOf(strings[Integer.parseInt(String.valueOf(first)) - 1]);
                     }
                 }
+                if(input.equals("813seventhree")){
+                    System.out.println();
+                }
                 if(last>'0'){
                     if(input.contains(String.valueOf(integers[Integer.parseInt(String.valueOf(last))-1]))) {
                         int check = -1;
-                        if(input.contains(strings[Integer.parseInt(String.valueOf(first)) - 1])){
-                            check = input.lastIndexOf(strings[Integer.parseInt(String.valueOf(first)) - 1]);
+                        if(input.contains(strings[Integer.parseInt(String.valueOf(last)) - 1])){
+                            check = input.lastIndexOf(strings[Integer.parseInt(String.valueOf(last)) - 1]);
                         }
                         indexLast = input.lastIndexOf(integers[Integer.parseInt(String.valueOf(last)) - 1]);
-                        if(check >= 0 && check < indexFirst){
-                            indexFirst = check;
+                        if(check >= 0 && check > indexFirst){
+                            indexLast = check;
                         }
                     } else {
                         indexLast = input.lastIndexOf(strings[Integer.parseInt(String.valueOf(last)) - 1]);
                     }
 
                 }
-                if(input.equals("hvmbmqnxk4onesix29kdhrdqtcfx1znmjhfjx")){
-//                    System.out.println();
-                }
+
 
                 if (input.contains(num)) {
 //                    System.out.println(input + " contains " + num);
