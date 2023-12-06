@@ -40,21 +40,30 @@ public class Day05 implements Day<Long> {
         }
         for (int source = 0; source < sources.length; source++) {
             for (Long[] mapping : mappingList) {
-                Long[] destinationRange = new Long[mapping[2].intValue()];
-                Long[] sourcesRange = new Long[mapping[2].intValue()];
-                for (int i = 0; i < mapping[2]; i++) {
-                    destinationRange[i] = mapping[0] + i;
-                    sourcesRange[i] = mapping[1] + i;
-                }
+//                Long[] destinationRange = new Long[mapping[2].intValue()];
+//                Long[] sourcesRange = new Long[mapping[2].intValue()];
+                Long destinationMin = mapping[0];
+                Long destinationMax = mapping[0]+mapping[2];
+                Long sourcesMin = mapping[1];
+                Long sourcesMax = mapping[1] + mapping[2];
+//                for (int i = 0; i < mapping[2]; i++) {
+//                    destinationRange[i] = mapping[0] + i;
+//                    sourcesRange[i] = mapping[1] + i;
+//                }
 
-                int j = java.util.Arrays.asList(sourcesRange).indexOf(sources[source]);
-                if (j < 0) {
+                Long j = sourcesMax - sources[source] >= 0?sources[source] - sourcesMin:-1;
+
+//                int j = java.util.Arrays.asList(sourcesRange).indexOf(sources[source]);
+                if (j < 0L) {
                     continue;
-                }
-                if (sources[source].equals(sourcesRange[j])) {
-                    sources[source] = destinationRange[j];
+                } else {
+                    sources[source] = destinationMin+j;
                     break;
                 }
+//                if (sources[source].equals(sourcesRange[j])) {
+//                    sources[source] = destinationRange[j];
+//                    break;
+//                }
 
             }
         }
@@ -68,6 +77,8 @@ public class Day05 implements Day<Long> {
 
         return null;
     }
+
+
 
 
 }
