@@ -23,8 +23,5 @@ public class Day06Test {
         Day<Integer> day = new Day06();
         assertEquals(Integer.valueOf(46), day.part2(input.getLines()));
     }
-
-    // too low: 9357725
-    // het  is: 81956384
 }
 

@@ -32,7 +32,7 @@ public class Day06 implements Day<Integer> {
         List<Integer> winPresses = new ArrayList<>();
         for(int i = 0; i<time.size(); i++){
             try {
-                winPresses.add(travelledDistance(time.get(i), distance.get(i)));
+                winPresses.add(travelledDistance( time.get(i), distance.get(i)));
             }catch(RuntimeException ignore){}
         }
 
@@ -45,7 +45,7 @@ public class Day06 implements Day<Integer> {
         return result;
     }
 
-    Integer travelledDistance(int raceTime,  int distance ){
+    Integer travelledDistance( int raceTime,  int distance ){
         List<Integer> winPresses = new ArrayList<>();
         for(int i = 1; i < raceTime; i++){
             int myDistance = i * (raceTime - i);
@@ -60,14 +60,47 @@ public class Day06 implements Day<Integer> {
             return winPresses.size();
         }
     }
+    Integer travelledDistance2( long raceTime,  long distance ){
+        List<Long> winPresses = new ArrayList<>();
+        for(long i = 1; i < raceTime; i++){
+            long myDistance = i * (raceTime - i);
+            if(myDistance > distance){
+                winPresses.add(i);
+            }
+        }
 
+        if(winPresses.isEmpty()){
+            throw new RuntimeException();
+        } else {
+            return winPresses.size();
+        }
+    }
 
 
 
     @Override
     public Integer part2(List<String> input) {
+        String time = "";
+        String distance = "";
+        Boolean isTime;
+        for(String s : input) {
+            isTime = s.contains("Time");
+            for (String i : s.split(" ")) {
+                if (!i.isEmpty() && !i.isBlank()) {
+                    if(isTime){
+                       time += i;
+                    }
+                    else {
+                        distance += i;
+                    }
+                }
+            }
+        }
 
-        return null;
+        return travelledDistance2(
+                Long.parseLong(time.substring(time.indexOf(':')+1)),
+                Long.parseLong(distance.substring(distance.indexOf(':')+1))
+        );
     }
 
 
