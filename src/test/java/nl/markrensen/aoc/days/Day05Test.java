@@ -21,7 +21,10 @@ public class Day05Test {
     @Test
     public void part2() {
         Day<Long> day = new Day05();
-        assertEquals(Long.valueOf(0), day.part2(input.getLines()));
+        assertEquals(Long.valueOf(46), day.part2(input.getLines()));
     }
+
+    // too low: 9357725
+    // het  is: 81956384
 }
 
