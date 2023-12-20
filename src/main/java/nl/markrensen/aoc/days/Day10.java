@@ -217,13 +217,13 @@ public class Day10 implements Day<Long> {
             visited[X.i][X.j] = true;
             p.previous = pList.get(pList.size()-1);
             p.id = 0;
-            p.orientation = getOrientation(X);
+            p.orientation = getOrientationLeft(X);
             pList.add(p);
         }
 
         // close the loop.
         S.previous = board[X.i][X.j];
-        S.orientation = getOrientation(S);
+        S.orientation = getOrientationLeft(S);
 
         pList.remove(0);
 
@@ -255,7 +255,8 @@ public class Day10 implements Day<Long> {
 
 //            while (keepgoing) {
             int id = 1;
-                for(Point p : pList){
+                for(Point p : pList.reversed()){
+//                    Point p = pList.get(i);
                     checkLeft(p, id, board, visited);
                 }
 
@@ -357,8 +358,8 @@ public class Day10 implements Day<Long> {
         return false;
     }
 
-    private Orientation getOrientation(Point x) {
-                /*
+    private Orientation getOrientationLeft(Point x){
+                 /*
         i+ -> omlaag
         i- -> omhoog
         j+ -> rechts
@@ -376,6 +377,31 @@ public class Day10 implements Day<Long> {
         }
         if(x.previous.j > x.j){
             return Orientation.LEFT;
+        }
+
+
+        return Orientation.NONE;
+    }
+
+    private Orientation getOrientationRight(Point x) {
+                /*
+        i+ -> omlaag
+        i- -> omhoog
+        j+ -> rechts
+        j- -> links
+         */
+
+        if(x.previous.i > x.i){
+            return Orientation.DOWN;
+        }
+        if(x.previous.i < x.i){
+            return Orientation.UP;
+        }
+        if(x.previous.j < x.j){
+            return Orientation.LEFT;
+        }
+        if(x.previous.j > x.j){
+            return Orientation.RIGHT;
         }
 
 
