@@ -8,6 +8,8 @@ import java.util.List;
 public class Day11 implements Day<Integer> {
 
     private int poundCount = 0;
+    private boolean part2 = false;
+    private int expansionNumber = 2;
 
     @Override
     public Integer part1(List<String> input) {
@@ -77,7 +79,9 @@ public class Day11 implements Day<Integer> {
         List<Point[]> newBoard = new ArrayList<>();
         for (Point[] row : board) {
             if (!containsPound(row)) {
-                newBoard.add(row);
+                    for(int e = 0; e < expansionNumber-1; e++){
+                        newBoard.add(row);
+                    }
             }
             newBoard.add(row);
         }
@@ -91,7 +95,9 @@ public class Day11 implements Day<Integer> {
         for (int i = 0; i < board[0].length; i++) {
             Point[] col = getCol(board, i);
             if (!containsPound(col)) {
-                newBoard.add(col);
+                for(int e = 0; e < expansionNumber-1; e++){
+                    newBoard.add(col);
+                }
             }
             newBoard.add(col);
         }
@@ -128,6 +134,9 @@ public class Day11 implements Day<Integer> {
     }
 
     private void printBoard(Point[][] board) {
+        if(part2){
+            return;
+        }
         int i = 0;
         System.out.print("   |");
         for (int j = 0; j < board[0].length; j++) {
@@ -178,8 +187,24 @@ public class Day11 implements Day<Integer> {
 
     @Override
     public Integer part2(List<String> input) {
+        part2 = true;
+        expansionNumber = 2;
+        Point[][] board = new Point[input.size()][input.get(0).length()];
+        for (int i = 0; i < input.size(); i++) {
+            String s = input.get(i);
+            char[] chars = s.toCharArray();
+            for (int j = 0; j < chars.length; j++) {
+                if(chars[j] == '#'){
+                    poundCount++;
+                    board[i][j] = new Point(i, j, chars[j], poundCount);
+                } else {
+                    board[i][j] = new Point(i, j, chars[j]);
+                }
+            }
+        }
 
-        return null;
+        board = stretchColumns(stretchRows(board));
+        return calculateRoutes(makePairs(board));
     }
     
 }
