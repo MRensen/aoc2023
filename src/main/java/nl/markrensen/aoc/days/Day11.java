@@ -227,16 +227,16 @@ public class Day11 implements Day<Long> {
             jmult = getMult(emptyCols, maxj, minj);
 
             // Tel 1000000 er bij op zo vaak er witruite tussen zit.
-            int correctionNumber = expansionNumber -1;
+            int correctionNumber = expansionNumber -1; // Dit heb ik gedaan om dat 1 miljoen makkelijker is dan 1 miljoen -1
             long counti = (maxi + (correctionNumber*imult[0])) - (mini + (correctionNumber*imult[1]));
             long countj = (maxj + (correctionNumber*jmult[0])) - (minj + (correctionNumber*jmult[1]));
 
             long toAdd = counti + countj;
-            System.out.println(globalCounter + " : " + toAdd); //testspul
+//            System.out.println(globalCounter + " : " + toAdd); //testspul
             count = count + toAdd;
-            if(globalCounter == 6){ //testspul
-                System.out.println();
-            }
+//            if(globalCounter == 6){ //testspul
+//                System.out.println();
+//            }
         }
         return count;
     }
@@ -264,6 +264,7 @@ public class Day11 implements Day<Long> {
         }
     }
 
+    // gebaseerd op "stretchRows"
     private List<Integer> findEmptyRows(Point[][] board) {
         List<Integer> rows = new ArrayList<>();
         for (int i = 0; i < board.length; i++){
@@ -274,6 +275,7 @@ public class Day11 implements Day<Long> {
         return rows;
     }
 
+    // gebaseerd op "StretchCols"
     private List<Integer> findEmptyCols(Point[][] board) {
         List<Integer> cols = new ArrayList<>();
         List<Point[]> newBoard = new ArrayList<>();
