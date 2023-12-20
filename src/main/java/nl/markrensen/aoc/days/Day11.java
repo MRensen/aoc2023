@@ -5,14 +5,13 @@ import nl.markrensen.aoc.common.Day;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Day11 implements Day<Integer> {
+public class Day11 implements Day<Long> {
 
     private int poundCount = 0;
-    private boolean part2 = false;
     private int expansionNumber = 2;
 
     @Override
-    public Integer part1(List<String> input) {
+    public Long part1(List<String> input) {
         Point[][] board = new Point[input.size()][input.get(0).length()];
         for (int i = 0; i < input.size(); i++) {
             String s = input.get(i);
@@ -28,7 +27,7 @@ public class Day11 implements Day<Integer> {
         }
 
         board = stretchColumns(stretchRows(board));
-        return calculateRoutes(makePairs(board));
+        return (long) calculateRoutes(makePairs(board));
 
 
     }
@@ -61,14 +60,18 @@ public class Day11 implements Day<Integer> {
 
     private int calculateRoutes(List<Point[]> pairs){
         int count = 0;
+        int i = 1;
         for(Point[] pair : pairs){
             int i1 = pair[0].i;
             int i2 = pair[1].i;
             int j1 = pair[0].j;
             int j2 = pair[1].j;
 
-                count += Math.max(i1,i2) - Math.min(i1,i2);
-                count += Math.max(j1,j2) - Math.min(j1,j2);
+                int counti = Math.max(i1,i2) - Math.min(i1,i2);
+                int countj = Math.max(j1,j2) - Math.min(j1,j2);
+            System.out.println(i + " : " + (counti+countj));
+            i++;
+            count = count+counti+countj;
 
         }
         return count;
@@ -79,9 +82,7 @@ public class Day11 implements Day<Integer> {
         List<Point[]> newBoard = new ArrayList<>();
         for (Point[] row : board) {
             if (!containsPound(row)) {
-                    for(int e = 0; e < expansionNumber-1; e++){
-                        newBoard.add(row);
-                    }
+                newBoard.add(row);
             }
             newBoard.add(row);
         }
@@ -95,9 +96,7 @@ public class Day11 implements Day<Integer> {
         for (int i = 0; i < board[0].length; i++) {
             Point[] col = getCol(board, i);
             if (!containsPound(col)) {
-                for(int e = 0; e < expansionNumber-1; e++){
                     newBoard.add(col);
-                }
             }
             newBoard.add(col);
         }
@@ -134,9 +133,6 @@ public class Day11 implements Day<Integer> {
     }
 
     private void printBoard(Point[][] board) {
-        if(part2){
-            return;
-        }
         int i = 0;
         System.out.print("   |");
         for (int j = 0; j < board[0].length; j++) {
@@ -186,9 +182,9 @@ public class Day11 implements Day<Integer> {
 
 
     @Override
-    public Integer part2(List<String> input) {
-        part2 = true;
-        expansionNumber = 2;
+    public Long part2(List<String> input) {
+        // hoeveel rijden moeten er tussen worden gezet?
+        expansionNumber = 1000000;
         Point[][] board = new Point[input.size()][input.get(0).length()];
         for (int i = 0; i < input.size(); i++) {
             String s = input.get(i);
@@ -203,8 +199,95 @@ public class Day11 implements Day<Integer> {
             }
         }
 
-        board = stretchColumns(stretchRows(board));
-        return calculateRoutes(makePairs(board));
+        // Ga niet meer werkelijk het board stretchen (dan krijg je heap overflow), maar bereken de hypothetische stretch
+//        board = stretchColumns(stretchRows(board));
+        return calculateRoutes2(makePairs(board), board);
     }
-    
+
+    private static int globalCounter = 0; // testspul
+    private long calculateRoutes2(List<Point[]> pairs, Point[][] board){
+        List<Integer> emptyCols = findEmptyCols(board);
+        List<Integer> emptyRows = findEmptyRows(board);
+        long count = 0;
+        for(Point[] pair : pairs){
+            globalCounter ++;
+            int i1 = pair[0].i;
+            int i2 = pair[1].i;
+            int j1 = pair[0].j;
+            int j2 = pair[1].j;
+            int maxi = Math.max(i1,i2);
+            int mini = Math.min(i1,i2);
+            int maxj = Math.max(j1,j2);
+            int minj = Math.min(j1,j2);
+
+            // bereken of er een wit kolom.rij tussen min en max zit en dus of en hoevaak er 100000 bij opgeteld moet worden.
+            long[] imult;
+            imult = getMult(emptyRows, maxi, mini);
+            long[] jmult;
+            jmult = getMult(emptyCols, maxj, minj);
+
+            // Tel 1000000 er bij op zo vaak er witruite tussen zit.
+            int correctionNumber = expansionNumber -1;
+            long counti = (maxi + (correctionNumber*imult[0])) - (mini + (correctionNumber*imult[1]));
+            long countj = (maxj + (correctionNumber*jmult[0])) - (minj + (correctionNumber*jmult[1]));
+
+            long toAdd = counti + countj;
+            System.out.println(globalCounter + " : " + toAdd); //testspul
+            count = count + toAdd;
+            if(globalCounter == 6){ //testspul
+                System.out.println();
+            }
+        }
+        return count;
+    }
+
+    private static long[] getMult(List<Integer> emptyRows, int max, int min) {
+        for(int i = 0; i < emptyRows.size(); i++){
+            if((min >= emptyRows.get(i) && i == emptyRows.size()-1) || min >= emptyRows.get(i) && min <= emptyRows.get(i+1)){
+                for(Integer rowend : emptyRows){
+                   if(max <= rowend){
+                       return new long[]{emptyRows.indexOf(rowend)-1, emptyRows.indexOf(emptyRows.get(i))};
+                   }
+                }
+                return new long[]{emptyRows.size()-1, emptyRows.indexOf(emptyRows.get(i))};
+            }
+        }
+        if(max > emptyRows.get(0)) {
+            for (Integer row : emptyRows) {
+                if (max <= row) {
+                    return new long[]{emptyRows.indexOf(row), 0};
+                }
+            }
+            return new long[]{emptyRows.size(), 0};
+        } else {
+            return new long[]{0, 0};
+        }
+    }
+
+    private List<Integer> findEmptyRows(Point[][] board) {
+        List<Integer> rows = new ArrayList<>();
+        for (int i = 0; i < board.length; i++){
+            if(!containsPound(board[i])){
+                rows.add(i);
+            }
+        }
+        return rows;
+    }
+
+    private List<Integer> findEmptyCols(Point[][] board) {
+        List<Integer> cols = new ArrayList<>();
+        List<Point[]> newBoard = new ArrayList<>();
+        for (int i = 0; i < board[0].length; i++) {
+            Point[] col = getCol(board, i);
+            newBoard.add(col);
+        }
+        for(int i = 0; i < newBoard.size(); i++){
+            if(!containsPound(newBoard.get(i))){
+                cols.add(i);
+            }
+        }
+        return cols;
+    }
+
+
 }
