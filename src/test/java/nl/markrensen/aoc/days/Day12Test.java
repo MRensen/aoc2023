@@ -10,7 +10,7 @@ import static org.junit.Assert.assertEquals;
 
 public class Day12Test {
     @Rule
-    public DayInputExternalResource input = new DayInputExternalResource(12);
+    public DayInputExternalResource input = new DayInputExternalResource(99);
 
     @Test
     public void part1() {

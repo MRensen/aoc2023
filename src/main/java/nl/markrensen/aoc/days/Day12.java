@@ -40,18 +40,30 @@ public class Day12 implements Day<Long> {
     }
 
     private boolean isLegal(String[] backup, String[] fill) {
-        return Arrays.equals(toQArray(fill, backup.length), backup);
+        return Arrays.equals(toPArray(fill), backup);
     }
 
     private boolean isPossibleLegal(String[] backup, String[] fill) {
-        String[] partBackup = Arrays.copyOfRange(backup, backup.length-fill.length, backup.length);
-        return Arrays.equals(toQArray(fill, partBackup.length), partBackup);
+        String[] poundArr = toPArray(fill);
+        if(poundArr.length > backup.length){
+            return false;
+        }
+        String[] partBackup = Arrays.copyOfRange(backup, backup.length-poundArr.length, backup.length);
+        boolean toreturn = Arrays.equals(poundArr, partBackup);
+        if(!toreturn){
+            try {
+                int indexFirstPound = Arrays.asList(fill).indexOf("#");
+                if (fill[indexFirstPound-1].equals("?")){
+                    return true;
+                }
+            } catch (IndexOutOfBoundsException e){}
+        }
+        return toreturn;
     }
 
-    private String[] toQArray(String[] fill, int length){
+    private String[] toPArray(String[] fill){
         List<Integer> poundGroup = new ArrayList<>();
         List<Integer> temp = new ArrayList<>();
-        Integer lastQIndex = null;
         for(int i = 0; i< fill.length; i++){
             String s = fill[i];
             if(s.equals("#")){
@@ -83,14 +95,20 @@ public class Day12 implements Day<Long> {
 //            String[] sdot = replaceNthQ(j, springs, ".");
 //            String[] spound = replaceNthQ(j, springs, "#");
 
-            if (containsQ(sdot)) {
+
+        if (containsQ(sdot)) {
+            if (isPossibleLegal(backup, sdot)) {
                 cum.addAll(recursiveFill(j - 1, sdot, Qindexes, backup));
-            } else {
-                cum.add(sdot);
             }
+        } else {
+            cum.add(sdot);
+        }
+
 
         if (containsQ(spound)) {
-            cum.addAll(recursiveFill(j - 1, spound, Qindexes, backup));
+            if (isPossibleLegal(backup, spound)) {
+                cum.addAll(recursiveFill(j - 1, spound, Qindexes, backup));
+            }
         } else {
             cum.add(spound);
         }
@@ -122,31 +140,31 @@ public class Day12 implements Day<Long> {
     @Override
     public Long part2(List<String> input) {
         long count = 0;
-//        for (String line : input) {
-//            count += getPossibleRepairs2(line);
-//        }
+        for (String line : input) {
+            count += getPossibleRepairs2(line);
+        }
         return count;
     }
 
-//    private long getPossibleRepairs2(String line) {
-//        long count = 0L;
-//        String[] splitLine = line.split(" ");
-//        String[] record = (splitLine[0] + "?" + splitLine[0] + "?" + splitLine[0] + "?" + splitLine[0] + "?" + splitLine[0] + "?" + splitLine[0] ).split("");
-//        String[] backup = (splitLine[1] + "," + splitLine[1] + "," + splitLine[1] + "," + splitLine[1] + "," + splitLine[1] + "," + splitLine[1] ).split(",");
-//        Integer[] questionmarkIndexes = countQuestionMarks(record);
-//        int qc = questionmarkIndexes.length-1;
-//
-//        //naive oplossing (brute)
-//        List<String[]> fills = recursiveFill(qc, record, questionmarkIndexes, backup);
-//
-//        for(String[] fill : fills){
-//            if(isLegal(backup, fill)){
-////            if(equalsBackup(fill, backup, qc+1)){
-//                count++;
-//            }
-//        }
-//
-//        return count;
-//    }
+    private long getPossibleRepairs2(String line) {
+        long count = 0L;
+        String[] splitLine = line.split(" ");
+        String[] record = (splitLine[0] + "?" + splitLine[0] + "?" + splitLine[0] + "?" + splitLine[0] + "?" + splitLine[0] + "?" + splitLine[0] ).split("");
+        String[] backup = (splitLine[1] + "," + splitLine[1] + "," + splitLine[1] + "," + splitLine[1] + "," + splitLine[1] + "," + splitLine[1] ).split(",");
+        Integer[] questionmarkIndexes = countQuestionMarks(record);
+        int qc = questionmarkIndexes.length-1;
+
+        //naive oplossing (brute)
+        List<String[]> fills = recursiveFill(qc, record, questionmarkIndexes, backup);
+
+        for(String[] fill : fills){
+            if(isLegal(backup, fill)){
+//            if(equalsBackup(fill, backup, qc+1)){
+                count++;
+            }
+        }
+
+        return count;
+    }
 
 }
