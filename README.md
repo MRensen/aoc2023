@@ -18,6 +18,4 @@
 | [Day 11](https://adventofcode.com/2023/day/11) | ⭐ | ⭐ |
 | [Day 12](https://adventofcode.com/2023/day/12) | ⭐ |   |
  <!--- advent_readme_stars table --->
- <!--- advent_readme_stars table --->
- ## 2024 Results
- <!--- advent_readme_stars table --->
+
